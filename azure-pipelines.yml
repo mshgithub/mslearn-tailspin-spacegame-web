@@ -8,7 +8,7 @@ variables:
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '2.1.505'
 
-trigger: # changes that trigger the build pipeline
+trigger: 
 branches:
   include:
   - '*'     # build all branches
