@@ -8,6 +8,14 @@ variables:
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   dotnetSdkVersion: '2.1.505'
 
+  trigger: # changes that trigger the build pipeline
+  branches:
+    include:
+    - '*'     # build all branches
+  paths:
+    exclude:
+    - docs/*  # exclude the docs folder
+
 
 steps:
 - task: DotNetCoreInstaller@0
