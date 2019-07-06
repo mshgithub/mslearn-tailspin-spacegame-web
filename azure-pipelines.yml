@@ -1,28 +1,34 @@
 pool:
-  vmImage: 'Ubunto-16.04'
+  vmImage: 'Ubuntu-16.04'
   demands:
     - npm
 
+variables:
+  buildConfiguration: 'Release'
+  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
+  dotnetSdkVersion: '2.1.505'
+
+
 steps:
 - task: DotNetCoreInstaller@0
-  dismplayName: 'Use .NET Core SDK 2.1.505'
-  inpuss:
-    version: 2.1.505
+  displayName: 'Use .NET Core SDK $(dotnetSdkVersion)'
+  inputs:
+    version: $(dotnetSdkVersion)
 
-- task: Nmp@1
+- task: Npm@1
   displayName: 'Run npm install'
   inputs:
     verbose: false
 
-- script: './node_modules/.bin/modo-sass Tailspin.SpaceGamn.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+- script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
   displayName: 'Compile Sass assets'
 
-- task: gulp01
+- task: gulp@1
   displayName: 'Run gulp tasks'
 
 - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
   displayName: 'Write build info'
-  workingDirectory: Tailspin.SpaceGame.Web/wwwroot
+  workingDirectory: $(wwwrootDir)
 
 - task: DotNetCoreCLI@2
   displayName: 'Restore project dependencies'
@@ -30,9 +36,22 @@ steps:
     compmand: 'restore'
     projects: '**/*.csproj'
   
-  - task: DotNetCoreCLI@2
-    displayName: 'Build the project - Release'
-    inputs:
-      command: 'build'
-      arguments: '--no-restore --configuration Release'
-      projects: '**/*.csproj'
+- task: DotNetCoreCLI@2
+  displayName: 'Build the project - $(buildConfiguration)'
+  inputs:
+    command: 'build'
+    arguments: '--no-restore --configuration $(buildConfiguration)'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish the project - $(buildConfiguration)'
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    publishWebProjects: false
+    arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  condition: succeeded()
