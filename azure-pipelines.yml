@@ -5,8 +5,8 @@ pool:
 
 steps:
 - task: DotNetCoreInstaller@0
-  dismplayName: 'Use .NET Core SDK 2.1.505'
-  inpuss:
+  displayName: 'Use .NET Core SDK 2.1.505'
+  inputs:
     version: 2.1.505
 
 - task: Nmp@1
