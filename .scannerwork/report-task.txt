@@ -1,0 +1,7 @@
+organization=mshgithub
+projectKey=space-game-web-0957
+serverUrl=https://sonarcloud.io
+serverVersion=8.0.0.27355
+dashboardUrl=https://sonarcloud.io/dashboard?id=space-game-web-0957
+ceTaskId=AWv-Ba5czU3INxZBqNIy
+ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWv-Ba5czU3INxZBqNIy
